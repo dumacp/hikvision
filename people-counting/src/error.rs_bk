@@ -1,0 +1,46 @@
+use reqwest::Error as reqError;
+use digest_auth::Error as digestError;
+use reqwest::header::ToStrError;
+use std::error;
+use std::fmt;
+
+#[derive(Debug)]
+pub struct Error {
+    details: String
+}
+
+impl Error {
+    pub fn new(msg: &str) -> Error {
+        Error{details: msg.to_string()}
+    }
+}
+
+impl fmt::Display for Error {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f,"{}",self.details)
+    }
+}
+
+impl error::Error for Error {
+    fn description(&self) -> &str {
+        &self.details
+    }
+}
+
+impl From<reqError> for Error {
+    fn from(err: reqError) -> Self {
+        Error::new(&format!("{}", err))
+    }
+}
+
+impl From<digestError> for Error {
+    fn from(err: digestError) -> Self {
+        Error::new(&format!("{}", err))
+    }
+}
+
+impl From<ToStrError> for Error {
+    fn from(err: ToStrError) -> Self {
+        Error::new(&format!("{}", err))
+    }
+}
