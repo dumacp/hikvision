@@ -1,8 +1,8 @@
 use reqwest::blocking::{Client, Response};
 use crate::basicauth::BasicAuth;
-use crate::request::{NotificationElement, HttpHostNotification};
+use crate::request::{HttpHostNotification, HttpHostConfig};
 
-pub const BASE_URI: &str = "http://192.168.122.1:8080";
+pub const BASE_URI: &str = "http://127.0.0.1:8080";
 
 pub struct PeopleCounting<'a> {
     basic_auth: &'a mut BasicAuth,
@@ -37,16 +37,16 @@ impl<'a> PeopleCounting<'a> {
         self.get(dir)
     }
 
-    pub fn put_http_host_list(&mut self, els: Vec<NotificationElement>) ->  crate::Result<Response> {
+    pub fn http_host_list(&mut self, config: HttpHostConfig) ->  crate::Result<Response> {
         let dir = "/ISAPI/Event/notification/httpHosts";
-        let body = HttpHostNotification::new(els).parse_list()?;
+        let body = HttpHostNotification::new(config).parse_list()?;
         println!("debug: {}", String::from_utf8(body.to_owned())?);
         self.put(dir, body)
     }
 
-    pub fn post_http_host(&mut self, els: Vec<NotificationElement>) ->  crate::Result<Response> {
+    pub fn http_host(&mut self, config: HttpHostConfig) ->  crate::Result<Response> {
         let dir = "/ISAPI/Event/notification/httpHosts";
-        let http_ntt = HttpHostNotification::new(els);
+        let http_ntt = HttpHostNotification::new(config);
         self.post(dir, http_ntt.parse()?)
     }
 

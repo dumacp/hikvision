@@ -5,6 +5,7 @@ use std::net::{IpAddr, Ipv4Addr};
 use xml::reader::XmlEvent;
 use xml::{EventReader, ParserConfig, EmitterConfig};
 use crate::gen_setters;
+use crate::map;
 // use std::str;
 
 
@@ -165,38 +166,59 @@ pub enum NotificationElement {
 }
 /* */
 pub struct HttpHostConfig {
-    id: String,
-    ipAddress: IpAddr,
-    portNo: u16,
-    hostName: String,
-    url: String,
-    protocolType: ProtocolType,
-    parameterFormatType: ParameterFormatType,
-    addressingFormatType: AddressingFormatType,
-    httpAuthenticationMethod: HttpAuthenticationMethod,
-    channels: String,
-    uploadImagesDataType: UploadImagesDataType,
-    eventMode: EventMode,
-    eventType: Vec<EventType>,
+    // pub id: String,
+    // ipAddress: IpAddr,
+    // portNo: u16,
+    // hostName: String,
+    // url: String,
+    // protocolType: ProtocolType,
+    // parameterFormatType: ParameterFormatType,
+    // addressingFormatType: AddressingFormatType,
+    // httpAuthenticationMethod: HttpAuthenticationMethod,
+    // channels: String,
+    // uploadImagesDataType: UploadImagesDataType,
+    // eventMode: EventMode,
+    // eventType: Vec<EventType>,
+    components: HashMap<String,NotificationElement>,
 }
 
 impl HttpHostConfig {
     pub fn new() -> HttpHostConfig {
-        HttpHostConfig {
-            id: "1".to_owned(),
-            ipAddress: IpAddr::V4(Ipv4Addr::new(127,0,0,1)),
-            portNo: 8080,
-            hostName: "localhost".to_owned(),
-            url: "http://127.0.0.1:8080/".to_owned(),
-            protocolType: ProtocolType::HTTP,
-            parameterFormatType: ParameterFormatType::XML,
-            addressingFormatType: AddressingFormatType::ipaddress,
-            httpAuthenticationMethod: HttpAuthenticationMethod::none,
-            channels: "1".to_owned(),
-            uploadImagesDataType: UploadImagesDataType::URL,
-            eventMode: EventMode::list,
-            eventType: vec![EventType::PeopleCounting],
-        }
+        let mut config = HttpHostConfig {
+        //     id: "1".to_owned(),
+        //     ipAddress: IpAddr::V4(Ipv4Addr::new(127,0,0,1)),
+        //     portNo: 8080,
+        //     hostName: "localhost".to_owned(),
+        //     url: "http://127.0.0.1:8080/".to_owned(),
+        //     protocolType: ProtocolType::HTTP,
+        //     parameterFormatType: ParameterFormatType::XML,
+        //     addressingFormatType: AddressingFormatType::ipaddress,
+        //     httpAuthenticationMethod: HttpAuthenticationMethod::none,
+        //     channels: "1".to_owned(),
+        //     uploadImagesDataType: UploadImagesDataType::URL,
+        //     eventMode: EventMode::list,
+        //     eventType: vec![EventType::PeopleCounting],
+            components: HashMap::new(),
+        };
+        let elements = map!{
+            String::from("id") => NotificationElement::Id("1".to_owned()),
+            String::from("ipAddress") => NotificationElement::IpAddress(IpAddr::V4(Ipv4Addr::new(127,0,0,1))),
+            String::from("portNo") => NotificationElement::Port(8080),
+            String::from("hostName") => NotificationElement::Hostname("localhost".to_owned()),
+            String::from("url") => NotificationElement::Url("http://127.0.0.1:8080/".to_owned()),
+            String::from("protocolType") => NotificationElement::Protocol(ProtocolType::HTTP),
+            String::from("parameterFormatType") => NotificationElement::ParameterFormat(ParameterFormatType::XML),
+            String::from("addressingFormatType") => NotificationElement::AddressingFormat(AddressingFormatType::ipaddress),
+            String::from("httpAuthenticationMethod") => NotificationElement::HttpAuthentication(HttpAuthenticationMethod::none),
+            String::from("channels") => NotificationElement::Channels("1".to_owned()),
+            String::from("uploadImagesDataType") => NotificationElement::UploadImagesDataType(UploadImagesDataType::URL),
+            String::from("eventMode") => NotificationElement::EventMode(EventMode::list),
+            String::from("eventType") => NotificationElement::EventType(vec![EventType::PeopleCounting])
+        };
+
+        config.components = elements;
+
+        config
     }
 }
 
@@ -217,6 +239,24 @@ gen_setters! { HttpHostConfig,
     eventType: val EventType
 }
 */
+
+gen_setters! { HttpHostConfig, components,
+    NotificationElement::Id, id: val String,
+    NotificationElement::IpAddress, ipAddress: val IpAddr,
+    NotificationElement::Port, portNo: val u64,
+    NotificationElement::Hostname, hostName: val String,
+    NotificationElement::Url, url: val String,
+    NotificationElement::Protocol, protocolType: val ProtocolType,
+    NotificationElement::ParameterFormat, parameterFormatType: val ParameterFormatType,
+    NotificationElement::AddressingFormat, addressingFormatType: val AddressingFormatType,
+    NotificationElement::HttpAuthentication, httpAuthenticationMethod: val HttpAuthenticationMethod,
+    NotificationElement::Channels, channels: val String,
+    NotificationElement::UploadImagesDataType, uploadImagesDataType: val UploadImagesDataType,
+    NotificationElement::EventMode, eventMode: val EventMode,
+    NotificationElement::EventType, eventType: val Vec<EventType>
+} 
+
+
 
 impl NotificationElement {
     fn getName(&self) -> String {
@@ -270,8 +310,15 @@ impl HttpHostNotification {
     //     self.elements.insert(el.getName(), el);
     // }
 
-    pub fn new(els: Vec<NotificationElement>) -> HttpHostNotification {
-        let h_els: HashMap<_,_> = els.into_iter().map(|v| (v.getName(), v)).collect();
+    // pub fn new(els: Vec<NotificationElement>) -> HttpHostNotification {
+    //     let h_els: HashMap<_,_> = els.into_iter().map(|v| (v.getName(), v)).collect();
+    //     HttpHostNotification {
+    //         elements: h_els,
+    //     }
+    // }
+
+    pub fn new(config: HttpHostConfig) -> HttpHostNotification {
+        let h_els: HashMap<_,_> = config.components;
         HttpHostNotification {
             elements: h_els,
         }

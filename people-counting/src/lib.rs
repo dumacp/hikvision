@@ -12,14 +12,16 @@ pub use basicauth::BasicAuth;
 pub use counting::PeopleCounting;
 
 pub use error::{Error, Result};
-pub use request::NotificationElement;
-pub use request::EventType;
-pub use request::EventMode;
-pub use request::HttpAuthenticationMethod;
-pub use request::ParameterFormatType;
-pub use request::ProtocolType;
-pub use request::AddressingFormatType;
-pub use request::UploadImagesDataType;
+pub use request::HttpHostConfig;
+// pub use request::NotificationElement;
+// pub use request::EventType;
+// pub use request::EventMode;
+// pub use request::HttpAuthenticationMethod;
+// pub use request::ParameterFormatType;
+// pub use request::ProtocolType;
+// pub use request::AddressingFormatType;
+// pub use request::UploadImagesDataType;
+
 
 
 

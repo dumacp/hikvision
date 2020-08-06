@@ -1,7 +1,7 @@
 use digest_auth::{self, AuthContext, WwwAuthenticateHeader, HttpMethod};
 use reqwest::blocking::{Client};
 
-pub const INITIAL_URI: &str = "http://192.168.122.1:8080/ISAPI/";
+pub const INITIAL_URI: &str = "http://127.0.0.1:8080/ISAPI/";
 // const WWW_AUTH_DEFAULT: &str = "Digest qop=\"auth\", realm=\"IP Camera(D8291)\", nonce=\"4d6a59334d446b7a4e6d59364d574579595751335a6a4d3d\", stale=\"FALSE\"";
 
 pub struct BasicAuth {
