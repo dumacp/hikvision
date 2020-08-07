@@ -79,7 +79,8 @@ fn main() {
 
     let http_config = HttpHostConfig::new()
         .ipAddress(IpAddr::V4(Ipv4Addr::new(192,168,188,23)))
-        .url("http://192.168.188.23:8088/".to_owned())
+        .url("/".to_owned())
+        .portNo(8088)
         .hostName("192.168.188.23".to_owned());
 
     let res = people.http_host_list(http_config).unwrap_or_else(|err| {

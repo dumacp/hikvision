@@ -23,7 +23,10 @@ macro_rules! gen_setter {
             /// Sets the field to the provided value and returns updated config object.
             pub fn $key(mut self, value: $t) -> $target {
                 let elm = $it(value);
-                let keyS = stringify!($key);
+                let mut keyS = stringify!($key);
+                if keyS == "eventType" {
+                    keyS = "type";
+                }
                 self.$map.insert(String::from(keyS), elm);
                 self
             }

@@ -213,7 +213,7 @@ impl HttpHostConfig {
             String::from("channels") => NotificationElement::Channels("1".to_owned()),
             String::from("uploadImagesDataType") => NotificationElement::UploadImagesDataType(UploadImagesDataType::URL),
             String::from("eventMode") => NotificationElement::EventMode(EventMode::list),
-            String::from("eventType") => NotificationElement::EventType(vec![EventType::PeopleCounting])
+            String::from("type") => NotificationElement::EventType(vec![EventType::PeopleCounting, EventType::scenechangedetection])
         };
 
         config.components = elements;
